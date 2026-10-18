@@ -13,6 +13,8 @@
     "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {
+    "@fontsource/baloo-2": "^5.3.0",
+    "@fontsource/baloo-tamma-2": "^5.3.0",
     "@jsquash/jpeg": "^1.6.0",
     "@neslinesli93/qpdf-wasm": "^0.3.0",
     "comlink": "^4.4.2",

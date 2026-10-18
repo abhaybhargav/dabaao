@@ -13,6 +13,7 @@ import { baseName, fmtBytes, isMobile } from "./lib/format";
 import { download, revoke, revokeAll } from "./lib/urls";
 import { imageToJpeg, imagesToPdf, pdfLossless, pdfPageCount, pdfRerender, PdfError, variantPasses, type Variant } from "./lib/pipeline";
 import { APP_NAME, SOURCE_URL } from "./config";
+import { Squisher, Wordmark } from "./components/Squisher";
 
 // Per-viewer conveniences only. Files are never written to storage.
 const store = {
@@ -298,8 +299,9 @@ export default function App() {
   return (
     <I18n.Provider value={{ t, lang }}>
       <header className="top">
-        <a className="brand" href="#/">
-          <img src="favicon.svg" alt="" width="28" height="28" /> {APP_NAME}
+        <a className="brand" href="#/" aria-label={APP_NAME}>
+          <Squisher mood="squished" size={64} />
+          <Wordmark />
         </a>
         <nav>
           <a href={view === "privacy" ? "#/" : "#/privacy"}>{view === "privacy" ? t("nav.tool") : t("nav.privacy")}</a>
@@ -316,11 +318,16 @@ export default function App() {
           <Privacy />
         ) : (
           <>
-            <p className="tagline">{t("app.tagline")}</p>
+            <div className="hero">
+              <h1>
+                {t("hero.before")}<em>{t("hero.word")}</em>
+              </h1>
+              <p>{t("app.tagline")}</p>
+            </div>
             <PresetPicker presetId={presetId} onPreset={setPresetId} preset={preset} custom={custom} onCustom={setCustom} />
 
             <section className="panel" aria-labelledby="step2">
-              <h2 id="step2">{t("step.files")}</h2>
+              <h2 id="step2"><span className="step pink">2</span>{t("step.files")}</h2>
               <DropZone preset={preset} onFiles={addFiles} />
               <div className="options">
                 {preset.output === "pdf" && (
@@ -339,12 +346,12 @@ export default function App() {
             {(jobs.length > 0 || combined) && (
               <section className="panel" aria-labelledby="step3">
                 <div className="row spread">
-                  <h2 id="step3">{t("batch.title")}</h2>
+                  <h2 id="step3"><span className="step teal">3</span>{t("batch.title")}</h2>
                   <div className="row">
                     {outputs.length > 1 && (
                       <button className="btn primary" disabled={busy} onClick={zipAll}>{t("batch.zip")}</button>
                     )}
-                    <button className="btn" onClick={clearAll}>{t("batch.clear")}</button>
+                    <button className="btn hot" onClick={clearAll}>{t("batch.clear")}</button>
                   </div>
                 </div>
                 {preset.maxFiles && outputs.length > preset.maxFiles && <p className="warn">{t("batch.tooMany", { n: preset.maxFiles })}</p>}
@@ -397,7 +404,10 @@ export default function App() {
       </main>
 
       <footer>
-        <p>{t("footer.offline")}</p>
+        <p className="promise">
+          <Squisher mood="happy" size={56} />
+          <span>{t("footer.offline")}</span>
+        </p>
         <p className="meta">
           {t("footer.presets", { date: PRESETS_VERSION })} · <a href={SOURCE_URL} target="_blank" rel="noopener noreferrer">{t("footer.source")}</a> ·{" "}
           <a href="#/privacy">{t("nav.privacy")}</a>

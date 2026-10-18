@@ -19,7 +19,7 @@ export function PresetPicker({ presetId, onPreset, preset, custom, onCustom }: P
 
   return (
     <section className="panel" aria-labelledby="step1">
-      <h2 id="step1">{t("step.portal")}</h2>
+      <h2 id="step1"><span className="step">1</span>{t("step.portal")}</h2>
       <div className="row">
         <label className="field">
           <span>{t("portal.label")}</span>

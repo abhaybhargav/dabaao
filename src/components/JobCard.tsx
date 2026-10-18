@@ -6,6 +6,7 @@ import { fmtBytes } from "../lib/format";
 import { download } from "../lib/urls";
 import { useT, type T } from "../i18n";
 import { CropBox } from "./CropBox";
+import { Squisher } from "./Squisher";
 
 type Props = {
   job: Job;
@@ -75,7 +76,7 @@ export function JobCard({ job, aspect, inkOption, onRemove, onChoose, onCrop, on
       {job.variants.length > 0 && (
         <div className={`variants n${job.variants.length}`}>
           {job.variants.map((v, i) => (
-            <VariantView key={i} v={v} chosen={i === job.chosen} multi={job.variants.length > 1} onChoose={() => onChoose(i)} />
+            <VariantView key={i} v={v} inputSize={job.size} chosen={i === job.chosen} multi={job.variants.length > 1} onChoose={() => onChoose(i)} />
           ))}
         </div>
       )}
@@ -93,10 +94,16 @@ function Progress({ job, t }: { job: Job; t: T }) {
     : job.phase === "optimising" ? t("job.optimising")
     : p ? t("job.page", { done: Math.min(p.done + 1, p.total), total: p.total })
     : t("job.working");
+  const frac = p && p.total ? Math.min(1, (p.done + 0.5) / p.total) : undefined;
   return (
     <div className="progress" role="status">
-      <span>{label}</span>
-      <progress value={p ? p.done : undefined} max={p ? p.total : undefined} />
+      <Squisher mood="loop" size={60} />
+      <div>
+        <span>{label}</span>
+        <span className={`bar${frac === undefined ? " indeterminate" : ""}`}>
+          <i style={frac === undefined ? undefined : { transform: `scaleX(${frac})` }} />
+        </span>
+      </div>
     </div>
   );
 }
@@ -113,7 +120,7 @@ function Thumb({ bitmap }: { bitmap: ImageBitmap }) {
   return <canvas ref={ref} className="thumb" />;
 }
 
-function VariantView({ v, chosen, multi, onChoose }: { v: Variant; chosen: boolean; multi: boolean; onChoose: () => void }) {
+function VariantView({ v, inputSize, chosen, multi, onChoose }: { v: Variant; inputSize: number; chosen: boolean; multi: boolean; onChoose: () => void }) {
   const { t } = useT();
   const pass = v.parts.every((p) => p.check.pass);
   const total = v.parts.reduce((s, p) => s + p.bytes.length, 0);
@@ -125,8 +132,16 @@ function VariantView({ v, chosen, multi, onChoose }: { v: Variant; chosen: boole
           {title} <span className="meta">{fmtBytes(total)}</span>
         </h4>
       )}
-      {v.parts[0]?.previewUrl && <img className="preview" src={v.parts[0].previewUrl} alt="" />}
-      <p className={pass ? "pass" : "fail"}>{pass ? "✓ " + t("job.pass") : "✕ " + t("job.fail")}</p>
+      {v.parts[0]?.previewUrl ? (
+        <div className="figure">
+          <img className="preview" src={v.parts[0].previewUrl} alt="" />
+          <span className={`stamp ${pass ? "pass" : "fail"}`}>{pass ? t("stamp.pass") : t("stamp.fail")}</span>
+        </div>
+      ) : (
+        <span className={`stamp-inline verdict ${pass ? "pass" : "fail"}`}>{pass ? t("stamp.pass") : t("stamp.fail")}</span>
+      )}
+      <p className={`verdict ${pass ? "pass" : "fail"}`}>{pass ? t("job.pass") : t("job.fail")}</p>
+      {Math.round((1 - total / inputSize) * 100) >= 1 && <span className="lighter">{t("job.lighter", { pct: Math.round((1 - total / inputSize) * 100) })}</span>}
       {v.parts.map((p) => (
         <PartRow key={p.name} p={p} />
       ))}

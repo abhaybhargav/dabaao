@@ -10,17 +10,17 @@ export default defineConfig({
       injectRegister: "script",
       registerType: "autoUpdate",
       manifest: {
-        name: "Dabaao — govt upload resizer",
+        name: "dabaao! — squeeze files for sarkari portals",
         short_name: "Dabaao",
         description: "Resize photos and PDFs to Indian government portal limits, entirely on your device.",
-        theme_color: "#0f5c4c",
-        background_color: "#f7f6f2",
+        theme_color: "#ffb627",
+        background_color: "#fff4e0",
         display: "standalone",
         icons: [{ src: "favicon.svg", sizes: "any", type: "image/svg+xml", purpose: "any" }],
       },
       workbox: {
         // Only the app's own code and data are cached; user files never touch the cache.
-        globPatterns: ["**/*.{js,css,html,svg,wasm,json,pfb,ttf,icc}"],
+        globPatterns: ["**/*.{js,css,html,svg,wasm,json,pfb,ttf,icc,woff2}"],
         globIgnores: ["**/pdfjs/cmaps/**"],
         maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
         navigateFallback: "index.html",
