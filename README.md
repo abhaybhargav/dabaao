@@ -1,5 +1,7 @@
 # Dabaao
 
+Live: https://dabaao.abhaybhargav.workers.dev · Source: https://github.com/abhaybhargav/dabaao
+
 Resize and compress photos and PDFs to Indian government portal upload limits (PAN, GST, ICEGATE, Sarathi, Income Tax, DGFT, Aadhaar, DigiLocker), entirely in the browser. Files never leave the device: there is no backend, no upload endpoint, no database and no analytics.
 
 ## How it works
@@ -26,9 +28,8 @@ npm run build && npm run preview   # production build with the real CSP
 npm run deploy   # build + wrangler deploy
 ```
 
-## Before launch
+## Still to do
 
-- Set `SOURCE_URL` in `src/config.ts` to the public repo; the footer and "Report a change" links use it.
 - Replace the portal home-page `source` URLs in `src/presets.json` with deep links to each portal's guideline page.
 - Hindi and Kannada strings in `src/i18n.ts` are machine-written and should be reviewed by native speakers.
 - Not implemented: PDF/A output for ICEGATE (planned Phase 5, Ghostscript WASM, AGPL). The ICEGATE preset says so in the UI.
