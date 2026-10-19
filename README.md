@@ -1,6 +1,6 @@
 # Dabaao
 
-Live: https://dabaao.abhaybhargav.workers.dev · Source: https://github.com/abhaybhargav/dabaao
+Live: https://dabaao.in · Source: https://github.com/abhaybhargav/dabaao
 
 Resize and compress photos and PDFs to Indian government portal upload limits (PAN, GST, ICEGATE, Sarathi, Income Tax, DGFT, Aadhaar, DigiLocker), entirely in the browser. Files never leave the device: there is no backend, no upload endpoint, no database and no analytics.
 

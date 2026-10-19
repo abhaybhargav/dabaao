@@ -7,5 +7,9 @@
     "not_found_handling": "single-page-application"
   },
   "observability": { "enabled": false },
-  "workers_dev": true
+  "workers_dev": true,
+  "routes": [
+    { "pattern": "dabaao.in", "custom_domain": true },
+    { "pattern": "www.dabaao.in", "custom_domain": true }
+  ]
 }
